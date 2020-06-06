@@ -1,0 +1,19 @@
+ul {
+  li {
+    list-style-type: none;
+    display: flex;
+  }
+}
+
+.header {
+  flex: 0 0 10%;
+}
+
+.detail-header {
+  flex: 0 0 70%;
+}
+
+.button-wrapper{
+    display: flex;
+    justify-content: flex-end;
+}

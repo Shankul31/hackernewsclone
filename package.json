@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "express": "^4.17.1",
     "ignore-styles": "^5.0.1",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
