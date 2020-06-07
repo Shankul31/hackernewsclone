@@ -6,8 +6,12 @@ function ListView() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let [pageNum, setPageNum] = useState(1);
-  let [upVoteCountsData, setUpVoteCountsData] = useState(
+  const [upVoteCountsData, setUpVoteCountsData] = useState(
     JSON.parse(localStorage.getItem("upVoteList"))
+  );
+  let [hide, setHide] = useState(false);
+  const [deletedItem, setDeletedItem] = useState(
+    JSON.parse(localStorage.getItem("deletedIndex"))
   );
 
   useEffect(() => {
@@ -70,11 +74,10 @@ function ListView() {
 
   const handleHide = (listId) => {
     let deletedIndex = JSON.parse(localStorage.getItem("deletedIndex")) || [];
-    console.log("delete", deletedIndex);
-    //  let updatedData = JSON.parse(JSON.stringify(data));
     deletedIndex.push(listId);
     localStorage.setItem("deletedIndex", JSON.stringify(deletedIndex));
-
+    setHide(true);
+    setDeletedItem(JSON.parse(localStorage.getItem("deletedIndex")));
   };
 
   return (
@@ -90,7 +93,13 @@ function ListView() {
           {data &&
             data.map((item, index) => {
               return (
-                <li key={index}>
+                <li
+                  key={index}
+                  style={{
+                    display:
+                      hide && deletedItem.includes(item.objectID) ? "none" : "",
+                  }}
+                >
                   <p className="header">{item.num_comments}</p>
                   <p className="header">
                     {upVoteCountsData &&
