@@ -6,6 +6,9 @@ function ListView() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let [pageNum, setPageNum] = useState(1);
+  let [upVoteCountsData, setUpVoteCountsData] = useState(
+    JSON.parse(localStorage.getItem("upVoteList"))
+  );
 
   useEffect(() => {
     getPageResults(pageNum);
@@ -27,8 +30,51 @@ function ListView() {
   const getPageResults = (pageNum) => {
     axios
       .get(`http://hn.algolia.com/api/v1/search?page=${pageNum}`)
-      .then((res) => setData(res.data.hits))
+      .then((res) => {
+        setData(res.data.hits);
+      })
       .catch((err) => console.log("error", err));
+  };
+
+  //   const updateUpVoteCount = () => {
+  //     const updateData = JSON.parse(JSON.stringify(data));
+  //     let upVotes = JSON.parse(localStorage.getItem("upVoteList")) || [];
+  //     updateData.forEach((data) => {
+  //       upVotes.forEach((element) => {
+  //         if (data.objectID === element.id) {
+  //           data.upVoteCount = element.upVoteCount;
+  //         }
+  //       });
+  //     });
+  //     setData(updateData);
+  //   };
+
+  const handleUpVote = (id) => {
+    let upVoteIndexes = JSON.parse(localStorage.getItem("upVoteIndexes")) || [];
+    let upVotes = JSON.parse(localStorage.getItem("upVoteList")) || [];
+    let count = 0;
+    if (!upVoteIndexes.includes(id)) {
+      upVotes.push({ id: id, upVoteCount: count });
+      upVoteIndexes.push(id);
+    } else {
+      upVotes.forEach((element) => {
+        if (element.id === id) {
+          element.upVoteCount++;
+        }
+      });
+    }
+    localStorage.setItem("upVoteList", JSON.stringify(upVotes));
+    localStorage.setItem("upVoteIndexes", JSON.stringify(upVoteIndexes));
+    setUpVoteCountsData(JSON.parse(localStorage.getItem("upVoteList")));
+  };
+
+  const handleHide = (listId) => {
+    let deletedIndex = JSON.parse(localStorage.getItem("deletedIndex")) || [];
+    console.log("delete", deletedIndex);
+    //  let updatedData = JSON.parse(JSON.stringify(data));
+    deletedIndex.push(listId);
+    localStorage.setItem("deletedIndex", JSON.stringify(deletedIndex));
+
   };
 
   return (
@@ -46,9 +92,21 @@ function ListView() {
               return (
                 <li key={index}>
                   <p className="header">{item.num_comments}</p>
-                  <p className="header">Vote Count</p>
-                  <p className="header">UpVote</p>
+                  <p className="header">
+                    {upVoteCountsData &&
+                      upVoteCountsData.map((element) => {
+                        if (element.id === item.objectID) {
+                          return element.upVoteCount;
+                        }
+                      })}
+                  </p>
+                  <button onClick={(evt) => handleUpVote(item.objectID)}>
+                    UpVote
+                  </button>
                   <p className="detail-header">{item.title}</p>
+                  <button onClick={(evt) => handleHide(item.objectID)}>
+                    hide
+                  </button>
                 </li>
               );
             })}
