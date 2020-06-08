@@ -1,5 +1,4 @@
 import React from "react";
-import { LineChart } from "react-charts-d3";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 

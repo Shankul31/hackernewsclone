@@ -8,16 +8,14 @@ function ListView() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let [pageNum, setPageNum] = useState(0);
-  const [upVoteCountsData, setUpVoteCountsData] = useState(
-    JSON.parse(localStorage.getItem("upVoteList"))
-  );
+  const [upVoteCountsData, setUpVoteCountsData] = useState("");
   let [hide, setHide] = useState(false);
-  const [deletedItem, setDeletedItem] = useState(
-    JSON.parse(localStorage.getItem("deletedIndex"))
-  );
+  const [deletedItem, setDeletedItem] = useState("");
 
   useEffect(() => {
     getPageResults(pageNum);
+    setUpVoteCountsData(JSON.parse(localStorage.getItem("upVoteList")));
+    setDeletedItem(JSON.parse(localStorage.getItem("deletedIndex")));
   }, []);
 
   const fetchPosts = (actionType) => {
@@ -37,7 +35,7 @@ function ListView() {
 
   const getPageResults = (pageNum) => {
     axios
-      .get(`http://hn.algolia.com/api/v1/search?page=${pageNum}`)
+      .get(`https://hn.algolia.com/api/v1/search?page=${pageNum}`)
       .then((res) => {
         setData(res.data.hits);
       })
