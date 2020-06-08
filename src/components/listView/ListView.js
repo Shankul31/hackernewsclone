@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ListView.scss";
 import GraphView from "../graphView/GraphView";
+import moment from "moment";
 
 function ListView() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  let [pageNum, setPageNum] = useState(1);
+  let [pageNum, setPageNum] = useState(0);
   const [upVoteCountsData, setUpVoteCountsData] = useState(
     JSON.parse(localStorage.getItem("upVoteList"))
   );
@@ -23,7 +24,9 @@ function ListView() {
     if (actionType === "prev") {
       --pageNum;
       setPageNum(pageNum);
-      getPageResults(pageNum);
+      if (pageNum >= 0) {
+        getPageResults(pageNum);
+      }
     }
     if (actionType === "next") {
       ++pageNum;
@@ -99,7 +102,10 @@ function ListView() {
                         : "",
                   }}
                 >
-                  <p className="header">{item.num_comments}</p>
+                  <p className="header">
+                    {" "}
+                    {item.num_comments ? item.num_comments : "-"}
+                  </p>
                   <p className="header">
                     {upVoteCountsData &&
                       upVoteCountsData.map((element) => {
@@ -117,16 +123,39 @@ function ListView() {
                     </span>
                   </p>
                   <p className="detail-header">
-                    {item.title}{" "}
-                    <span
-                      onClick={(evt) => handleHide(item.objectID)}
-                      style={{
-                        display: !item.title ? "none" : "",
-                        cursor: "pointer",
-                      }}
-                    >
-                      [hide]
-                    </span>
+                    {item.title}
+                    {item.title && (
+                      <small>
+                        <a
+                          style={{ marginLeft: "5px", marginRight: "5px" }}
+                          href={item.url}
+                          target="_blank"
+                        >
+                          ({item.url})
+                        </a>
+                      </small>
+                    )}
+                    {item.title && (
+                      <small style={{ marginLeft: "5px", marginRight: "5px" }}>
+                        by <b>{item.author}</b>
+                      </small>
+                    )}
+                    {item.title && (
+                      <small style={{ marginLeft: "5px", marginRight: "5px" }}>
+                        {moment(item.created_at_i).format("LL")}
+                      </small>
+                    )}
+                    {item.title && (
+                      <span
+                        onClick={(evt) => handleHide(item.objectID)}
+                        style={{
+                          display: !item.title ? "none" : "",
+                          cursor: "pointer",
+                        }}
+                      >
+                        [hide]
+                      </span>
+                    )}
                   </p>
                 </li>
               );
