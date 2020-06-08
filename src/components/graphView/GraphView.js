@@ -7,27 +7,11 @@ function GraphView({ data }) {
   let newsIds = [];
   let upVotes = []
   let chartOptions = JSON.parse(JSON.stringify(data));
-  chartOptions.forEach((element) => {
+  chartOptions && chartOptions.forEach((element) => {
     newsIds.push(element.id);
     upVotes.push(element.upVoteCount)
   });
 
-  //   let chartData = data.map((item) => {
-  //     return item.id;
-  //   });
-  console.log("data", newsIds);
-
-  //   const options = {
-  //     series: [
-  //       {
-  //         name: "ID",
-  //         data: chartData,
-  //       },
-  //       {
-
-  //       }
-  //     ],
-  //   };
   const options = {
     chart: {
       type: "line",

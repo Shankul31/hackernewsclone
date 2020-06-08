@@ -1,7 +1,15 @@
+body {
+  font-family: "Roboto", "FontAwesome", Arial, system-ui, sans-serif;
+  font-weight: 500;
+}
+
 ul {
   li {
     list-style-type: none;
     display: flex;
+    &:nth-child(even) {
+      background: #ccc;
+    }
   }
 }
 
@@ -9,16 +17,27 @@ ul {
   flex: 0 0 10%;
 }
 
-.detail-header {
+.news-detail-header {
   flex: 0 0 70%;
 }
-
-.button-wrapper{
-    display: flex;
-    justify-content: flex-end;
+.button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 50px;
+  a {
+    text-decoration: dashed;
+    cursor: pointer;
+  }
 }
 
-.list-container-wrapper{
+.list-container-wrapper {
   height: 500px;
   overflow-y: scroll;
+}
+.upvote-button {
+  cursor: pointer;
+}
+
+.table-header {
+  background-color: #59b43a;
 }

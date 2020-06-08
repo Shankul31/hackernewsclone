@@ -41,19 +41,6 @@ function ListView() {
       .catch((err) => console.log("error", err));
   };
 
-  //   const updateUpVoteCount = () => {
-  //     const updateData = JSON.parse(JSON.stringify(data));
-  //     let upVotes = JSON.parse(localStorage.getItem("upVoteList")) || [];
-  //     updateData.forEach((data) => {
-  //       upVotes.forEach((element) => {
-  //         if (data.objectID === element.id) {
-  //           data.upVoteCount = element.upVoteCount;
-  //         }
-  //       });
-  //     });
-  //     setData(updateData);
-  //   };
-
   const handleUpVote = (id) => {
     let upVoteIndexes = JSON.parse(localStorage.getItem("upVoteIndexes")) || [];
     let upVotes = JSON.parse(localStorage.getItem("upVoteList")) || [];
@@ -74,22 +61,31 @@ function ListView() {
   };
 
   const handleHide = (listId) => {
+    let upVotes = JSON.parse(localStorage.getItem("upVoteList")) || [];
     let deletedIndex = JSON.parse(localStorage.getItem("deletedIndex")) || [];
     deletedIndex.push(listId);
     localStorage.setItem("deletedIndex", JSON.stringify(deletedIndex));
     setHide(true);
     setDeletedItem(JSON.parse(localStorage.getItem("deletedIndex")));
+
+    upVotes.forEach((element, index) => {
+      if (element.id === listId) {
+        upVotes.splice(index, 1);
+      }
+    });
+    localStorage.setItem("upVoteList", JSON.stringify(upVotes));
+    setUpVoteCountsData(JSON.parse(localStorage.getItem("upVoteList")));
   };
 
   return (
     <div>
       <div className="list-container-wrapper">
         <ul>
-          <li>
+          <li className="table-header">
             <p className="header">Comments</p>
             <p className="header">Vote Count</p>
             <p className="header">UpVote</p>
-            <p className="detail-header">News Details</p>
+            <p className="news-detail-header">News Details</p>
           </li>
           {data &&
             data.map((item, index) => {
@@ -112,22 +108,37 @@ function ListView() {
                         }
                       })}
                   </p>
-                  <button onClick={(evt) => handleUpVote(item.objectID)}>
-                    UpVote
-                  </button>
-                  <p className="detail-header">{item.title}</p>
-                  <button onClick={(evt) => handleHide(item.objectID)}>
-                    hide
-                  </button>
+                  <p className="header">
+                    <span
+                      className="upvote-button"
+                      onClick={(evt) => handleUpVote(item.objectID)}
+                    >
+                      &#9650;
+                    </span>
+                  </p>
+                  <p className="detail-header">
+                    {item.title}{" "}
+                    <span
+                      onClick={(evt) => handleHide(item.objectID)}
+                      style={{
+                        display: !item.title ? "none" : "",
+                        cursor: "pointer",
+                      }}
+                    >
+                      [hide]
+                    </span>
+                  </p>
                 </li>
               );
             })}
         </ul>
       </div>
       <div className="button-wrapper">
-        <button onClick={(evt) => fetchPosts("prev")}>Prev</button>
-        <button onClick={(evt) => fetchPosts("next")}>Next</button>
+        <a onClick={(evt) => fetchPosts("prev")}>Prev</a>
+        <span style={{ marginLeft: "10px", marginRight: "10px" }}>|</span>
+        <a onClick={(evt) => fetchPosts("next")}>Next</a>
       </div>
+      <hr />
       <GraphView data={upVoteCountsData} />
     </div>
   );
