@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ListView.scss";
+import GraphView from "../graphView/GraphView";
 
 function ListView() {
   const [data, setData] = useState([]);
@@ -97,7 +98,9 @@ function ListView() {
                   key={index}
                   style={{
                     display:
-                      hide && deletedItem.includes(item.objectID) ? "none" : "",
+                      deletedItem && deletedItem.includes(item.objectID)
+                        ? "none"
+                        : "",
                   }}
                 >
                   <p className="header">{item.num_comments}</p>
@@ -125,6 +128,7 @@ function ListView() {
         <button onClick={(evt) => fetchPosts("prev")}>Prev</button>
         <button onClick={(evt) => fetchPosts("next")}>Next</button>
       </div>
+      <GraphView data={upVoteCountsData} />
     </div>
   );
 }

@@ -17,3 +17,8 @@ ul {
     display: flex;
     justify-content: flex-end;
 }
+
+.list-container-wrapper{
+  height: 500px;
+  overflow-y: scroll;
+}
