@@ -11,7 +11,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "express": "^4.17.1",
-    "highcharts": "^8.1.0",
+    "highcharts": "^9.0.0",
     "highcharts-react-official": "^3.0.0",
     "ignore-styles": "^5.0.1",
     "moment": "^2.26.0",
